@@ -42,21 +42,47 @@ exports.handler = async (event) => {
 
     console.log(JSON.stringify(sentiment));
 
+    let responseText = 'ふだんどおりが一番だね';
+    const {
+        Sentiment,
+        SentimentScore
+    } = sentiment.ResultList[0];
+
+    switch (Sentiment) {
+        case 'POSITIVE':
+            if (SentimentScore.Positive > 0.90) {
+                responseText = '今日もガンガンいきましょう！';
+            } else if (SentimentScore.Positive > 0.60) {
+                responseText = 'きっと今日もバッチリ';
+            }
+            break;
+        case 'NEGATIVE':
+            if (SentimentScore.Negative > 0.90) {
+                responseText = 'いのちを大事に。。';
+            } else if (SentimentScore.Negative > 0.60) {
+                responseText = 'なにか元気ないね。嫌なことあった？';
+            }
+            break;
+        case 'NEUTRAL': break;
+        case 'MIXED': break;
+        default: break;
+    }
+    console.log(responseText);
+
     // 返信するメッセージ
     const res = await axios.post('/message/reply', {
         replyToken: event.events[0].replyToken,
         messages: [
             {
                 type: 'text',
-                text: 'こんにちはったらこんぬつは'
+                text: responseText
             }
         ]
     });
     console.log(res);
 
-    const response = {
+    return {
         statusCode: 200,
         body: JSON.stringify('Hello from Lambda!'),
     };
-    return response;
 };
