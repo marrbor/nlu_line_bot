@@ -1,0 +1,11 @@
+{
+  "name": "LINEWebhooks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "haruharuharuby",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-comprehend": "^3.27.0",
+    "axios": "^0.21.1"
+  }
+}
