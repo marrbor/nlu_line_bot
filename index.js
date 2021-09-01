@@ -1,3 +1,4 @@
+const { Comprehend } = require('aws-sdk');
 const Axios = require('axios');
 exports.handler = async (event) => {
     // TODO implement
@@ -30,6 +31,16 @@ exports.handler = async (event) => {
     //         }
     //     ]
     // }
+
+    const comprehend = new Comprehend();
+    const sentiment = await comprehend.batchDetectSentiment({
+        LanguageCode: 'ja',
+        TextList: [
+            event.events[0].message.text
+        ]
+    }).promise();
+
+    console.log(JSON.stringify(sentiment));
 
     // 返信するメッセージ
     const res = await axios.post('/message/reply', {
